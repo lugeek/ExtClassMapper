@@ -1,9 +1,15 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compileOnly deps.runtime
+//    compileOnly deps.runtime
     api deps.annotations
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

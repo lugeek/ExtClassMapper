@@ -26,7 +26,7 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 
-import static com.lugeek.extclassmapper.annotations.Consts.IEXTTARGET_ROOT;
+import static com.lugeek.extclassmapper.annotations.Consts.LOADER_INTERFACE_PATH;
 import static com.lugeek.extclassmapper.annotations.Consts.NAME_OF_ROOT;
 import static com.lugeek.extclassmapper.annotations.Consts.PACKAGE_OF_GENERATE_FILE;
 
@@ -34,17 +34,17 @@ import static com.lugeek.extclassmapper.annotations.Consts.PACKAGE_OF_GENERATE_F
 @AutoService(Processor.class)
 @SupportedAnnotationTypes({"com.lugeek.extclassmapper.annotations.ExtClassMapper"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class ExtTargetProcessor extends BaseProcessor {
+public class ExtClassMapperProcessor extends BaseProcessor {
 
     private Map<String, ClassName> targetMap = new HashMap<>();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (annotations != null && !annotations.isEmpty()) {
-            Set<? extends Element> extTargetElements = roundEnv.getElementsAnnotatedWith(ExtClassMapper.class);
+            Set<? extends Element> extClassMapperElements = roundEnv.getElementsAnnotatedWith(ExtClassMapper.class);
             try {
-                info("Process ExtTarget start ...");
-                this.parseExtTarget(extTargetElements);
+                info("Process ExtClassMapper start ...");
+                this.parseExtClassMapper(extClassMapperElements);
             } catch (Exception e) {
                 error(e.getMessage());
             }
@@ -53,22 +53,22 @@ public class ExtTargetProcessor extends BaseProcessor {
         return false;
     }
 
-    private void parseExtTarget(Set<? extends Element> extTargetElements) throws IOException {
-        if (extTargetElements == null || extTargetElements.isEmpty()) return;
-        info("Found " + extTargetElements.size() + " ExtTarget");
+    private void parseExtClassMapper(Set<? extends Element> classElements) throws IOException {
+        if (classElements == null || classElements.isEmpty()) return;
+        info("Found " + classElements.size() + " ExtClassMapper");
 
-        for (Element element : extTargetElements) {
+        for (Element element : classElements) {
             if (element.getKind() != ElementKind.CLASS) {
-                error(element.asType().toString() + " @ExtTarget only works for class");
+                error(element.asType().toString() + " @ExtClassMapper only works for class");
             }
             TypeMirror tm = element.asType();
             info(tm.toString());
             ClassName className = ClassName.get((TypeElement)element);
-            ExtClassMapper extTarget = element.getAnnotation(ExtClassMapper.class);
-            String[] targets = extTarget.value();
+            ExtClassMapper extClassMapper = element.getAnnotation(ExtClassMapper.class);
+            String[] targets = extClassMapper.value();
 
             if (targets == null || targets.length <= 0) {
-                error("ExtTarget is empty for class: " + className);
+                error("ExtClassMappers'value is empty for class: " + className);
             }
 
             for (String target : targets) {
@@ -76,7 +76,7 @@ public class ExtTargetProcessor extends BaseProcessor {
             }
         }
 
-        TypeElement iTargetRoot = mElementUtils.getTypeElement(IEXTTARGET_ROOT);
+        TypeElement iTargetRoot = mElementUtils.getTypeElement(LOADER_INTERFACE_PATH);
         generatedRoot(iTargetRoot);
     }
 
@@ -103,7 +103,7 @@ public class ExtTargetProcessor extends BaseProcessor {
                     entry.getKey(),
                     entry.getValue());
         }
-        //生成$Root$类: public class ExtJSBridge_Root_appxx implements IExtTargetRoot {}
+        //生成$Root$类: public class ExtClassMapper_Root_appxx implements IExtClassMapperLoader {}
         String className = NAME_OF_ROOT + moduleName;
         TypeSpec typeSpec = TypeSpec.classBuilder(className)
                 .addSuperinterface(ClassName.get(iTargetRoot))
@@ -112,7 +112,7 @@ public class ExtTargetProcessor extends BaseProcessor {
                 .build();
         try {
             JavaFile.builder(PACKAGE_OF_GENERATE_FILE, typeSpec)
-                    .addFileComment("Generated code from ExtJSBridge. Do not modify!")
+                    .addFileComment("Generated code from ExtClassMapper. Do not modify!")
                     .build().writeTo(mFiler);
             info(className + ".class generated!");
         } catch (IOException e) {
