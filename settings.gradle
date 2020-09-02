@@ -1,0 +1,5 @@
+include ':extclassmapper-api'
+include ':extclassmapper-compile'
+include ':extclassmapper-annotations'
+include ':app'
+rootProject.name = "ExtClassMapper"

@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation project(':extclassmapper-annotations')
+    implementation deps.service
+    annotationProcessor deps.service
+    implementation deps.javapoet
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
