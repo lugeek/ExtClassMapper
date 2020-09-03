@@ -41,6 +41,6 @@ dependencies {
     implementation deps.appcompatv7
 //    implementation project(':extclassmapper-api')
 //    annotationProcessor project(':extclassmapper-compile')
-    implementation 'com.lugeek:extclassmapper-api:0.0.1'
-    annotationProcessor 'com.lugeek:extclassmapper-compile:0.0.1'
+    implementation 'com.lugeek:extclassmapper:0.0.1'
+    annotationProcessor 'com.lugeek:extclassmapper-compiler:0.0.1'
 }
