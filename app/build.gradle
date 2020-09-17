@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.lugeek.extclassmapper.example"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -39,8 +39,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation deps.appcompatv7
-//    implementation project(':extclassmapper-api')
-//    annotationProcessor project(':extclassmapper-compile')
-    implementation 'com.lugeek:extclassmapper:0.0.1'
-    annotationProcessor 'com.lugeek:extclassmapper-compiler:0.0.1'
+    implementation project(':extclassmapper-api')
+    annotationProcessor project(':extclassmapper-compile')
+//    implementation 'com.lugeek:extclassmapper:0.0.1'
+//    annotationProcessor 'com.lugeek:extclassmapper-compiler:0.0.1'
 }

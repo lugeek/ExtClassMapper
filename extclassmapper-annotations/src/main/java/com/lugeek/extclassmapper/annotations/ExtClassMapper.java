@@ -10,4 +10,5 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Retention(CLASS)
 public @interface ExtClassMapper {
     String[] value();
+    String group() default "default";
 }

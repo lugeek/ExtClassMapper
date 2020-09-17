@@ -1,15 +1,14 @@
 apply plugin: 'java-library'
 
 dependencies {
-//    compileOnly deps.runtime
-    api deps.annotations
+    api rootProject.ext.dependencies.annotations
 }
 
 javadoc {
     options.encoding = 'UTF-8'
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+sourceCompatibility = rootProject.ext.java.sourceCompatibility
+targetCompatibility = rootProject.ext.java.targetCompatibility
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

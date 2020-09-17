@@ -2,16 +2,16 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation project(':extclassmapper-annotations')
-    implementation deps.service
-    annotationProcessor deps.service
-    implementation deps.javapoet
+    implementation rootProject.ext.dependencies.service
+    annotationProcessor rootProject.ext.dependencies.service
+    implementation rootProject.ext.dependencies.javapoet
 }
 
 javadoc {
     options.encoding = 'UTF-8'
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+sourceCompatibility = rootProject.ext.java.sourceCompatibility
+targetCompatibility = rootProject.ext.java.targetCompatibility
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

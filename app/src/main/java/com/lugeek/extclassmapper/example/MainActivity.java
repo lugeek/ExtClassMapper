@@ -11,8 +11,11 @@ import android.widget.TextView;
 import com.lugeek.extclassmapper.annotations.ExtClassMapper;
 import com.lugeek.extclassmapper.api.ECMapper;
 
+import java.util.HashMap;
+import java.util.Map;
 
-@ExtClassMapper("main")
+
+@ExtClassMapper(value = "main", group = "testGroup")
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -21,13 +24,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LinearLayout linearLayout = findViewById(R.id.linearLayout);
-        for (String key : ECMapper.targetsIndex.keySet()) {
-            TextView textView = new TextView(this);
-            textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
-            textView.setGravity(Gravity.CENTER_VERTICAL);
-            textView.setText(key + " : " + ECMapper.getsInstance().getClz(key).getSimpleName() + ".class");
-            linearLayout.addView(textView);
+        for (String group : ECMapper.getsInstance().groupSet()) {
+            Map<String, Class<?>> targetMap = ECMapper.getsInstance().getGroup(group);
+            for (String target : targetMap.keySet()) {
+                TextView textView = new TextView(this);
+                textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+                textView.setGravity(Gravity.CENTER_VERTICAL);
+                textView.setText(group + " : " + target + " : " + ECMapper.getsInstance().getClz(group, target).getSimpleName() + ".class");
+                linearLayout.addView(textView);
+            }
         }
-
     }
 }
